@@ -14,6 +14,7 @@ import os
 import sys
 import tempfile
 import subprocess
+import magic
 
 idc_args = ['__idascript_active__']
 IDA_INSTALL_PATH = "%%IDA_INSTALL_PATH%%"
@@ -40,6 +41,11 @@ if len(sys.argv) >= 3:
     idc_args += sys.argv[3:]
     
     if idb.endswith('.i64'):
+        suffix = '64'
+
+    m=magic.open(magic.MAGIC_NONE)
+    m.load()
+    if '64-bit' in m.file(idb):
         suffix = '64'
 else:
     idc = os.path.abspath(sys.argv[1])
